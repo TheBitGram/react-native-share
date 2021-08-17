@@ -95,16 +95,22 @@
         _mChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
         placeholder = _mChangeRequest.placeholderForCreatedAsset;
     } completionHandler:^(BOOL success, NSError *error) {
-        
         if (success) {
             NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=\%@", [placeholder localIdentifier]]];
-            
             if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
                 if (@available(iOS 10.0, *)) {
                     [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
+                    if (successCallback != NULL) {
+                        successCallback(@[@true, @"Success | %@", [placeholder localIdentifier]]);
+                    }
+                } else {
+                    if (successCallback != NULL) {
+                        successCallback(@[@false, @"Requires at least iOS 10 | %@", [placeholder localIdentifier]]);
+                    }
                 }
+            } else {
                 if (successCallback != NULL) {
-                    successCallback(@[]);
+                    successCallback(@[@false, @"Cannot Open instagram URL | %@", [placeholder localIdentifier]]);
                 }
             }
         }
