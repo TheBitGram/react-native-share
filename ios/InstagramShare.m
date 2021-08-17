@@ -101,16 +101,19 @@
                 if (@available(iOS 10.0, *)) {
                     [[UIApplication sharedApplication] openURL:instagramURL options:@{} completionHandler:NULL];
                     if (successCallback != NULL) {
-                        successCallback(@[@true, @"Success | %@", [placeholder localIdentifier]]);
+                        NSString *responseString = [NSString stringWithFormat:@"Success | %@", [placeholder localIdentifier]];
+                        successCallback(@[@true, responseString]);
                     }
                 } else {
                     if (successCallback != NULL) {
-                        successCallback(@[@false, @"Requires at least iOS 10 | %@", [placeholder localIdentifier]]);
+                        NSString *responseString = [NSString stringWithFormat:@"Requires at least iOS 10 | %@", [placeholder localIdentifier]];
+                        successCallback(@[@false, responseString]);
                     }
                 }
             } else {
                 if (successCallback != NULL) {
-                    successCallback(@[@false, @"Cannot Open instagram URL | %@", [placeholder localIdentifier]]);
+                    NSString *responseString = [NSString stringWithFormat:@"Cannot Open Instagram URL, ensure that Instagram is installed | %@", [placeholder localIdentifier]];
+                    successCallback(@[@false, responseString]);
                 }
             }
         }
